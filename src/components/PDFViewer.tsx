@@ -1,3 +1,5 @@
+// Filename: PDFViewer.tsx
+
 import { useState, useRef } from "react";
 import { Document, Page, pdfjs } from "react-pdf";
 import { Card } from "@/components/ui/card";
@@ -6,16 +8,14 @@ import { Badge } from "@/components/ui/badge";
 import { Loader2, FileText, ZoomIn, ZoomOut, RotateCw } from "lucide-react";
 import { ScrollArea } from "@/components/ui/scroll-area";
 
-// Import CSS for react-pdf
 import 'react-pdf/dist/Page/AnnotationLayer.css';
 import 'react-pdf/dist/Page/TextLayer.css';
 
-// Set up PDF.js worker - serve from local public directory
 pdfjs.GlobalWorkerOptions.workerSrc = '/pdf.worker.min.mjs';
 
 interface PDFViewerProps {
   file: File | null;
-  onWordClick: (word: string, event: React.MouseEvent) => void;
+  onWordClick: (word: string, fullText: string, event: React.MouseEvent) => void;
 }
 
 export function PDFViewer({ file, onWordClick }: PDFViewerProps) {
@@ -27,147 +27,91 @@ export function PDFViewer({ file, onWordClick }: PDFViewerProps) {
   const [error, setError] = useState<string | null>(null);
   const textLayerRef = useRef<HTMLDivElement>(null);
 
-  function onDocumentLoadSuccess({ numPages }: { numPages: number }) {
+  const onDocumentLoadSuccess = ({ numPages }: { numPages: number }) => {
     setNumPages(numPages);
     setLoading(false);
     setError(null);
-  }
+  };
 
-  function onDocumentLoadError(error: Error) {
-    setError("Failed to load PDF. Please try another file.");
+  const onDocumentLoadError = (err: any) => {
+    setError("Failed to load PDF file. Please try again.");
     setLoading(false);
-    console.error("PDF load error:", error);
-  }
+    console.error(err);
+  };
 
   const handleTextClick = (event: React.MouseEvent) => {
-    const target = event.target as HTMLElement;
-    
-    // Check if clicked element is part of text layer
-    if (target.classList.contains('textLayer') || target.closest('.textLayer')) {
-      const selection = window.getSelection();
-      let wordToDefine = '';
-      
-      // Try to get selected text first
-      if (selection && selection.toString().trim()) {
-        const selectedText = selection.toString().trim();
-        const words = selectedText.split(/\s+/);
-        
-        if (words.length === 1 && words[0].length > 1) {
-          wordToDefine = words[0];
-        }
-      } else if (target.textContent) {
-        // If no selection, try to get word from clicked element
-        wordToDefine = target.textContent.trim();
-      }
-      
-      if (wordToDefine) {
-        const cleanWord = wordToDefine.replace(/[^\w]/g, '');
-        if (cleanWord && cleanWord.length > 1) {
-          onWordClick(cleanWord, event);
-        }
-      }
+    const selection = window.getSelection();
+    if (selection && selection.toString().length > 0) {
+      const selectedWord = selection.toString().trim();
+      const range = selection.getRangeAt(0);
+
+      const surroundingText = range.startContainer.parentElement?.textContent || '';
+
+      onWordClick(selectedWord, surroundingText, event);
     }
   };
 
   const changePage = (offset: number) => {
-    setPageNumber(prevPageNumber => {
-      const newPageNumber = prevPageNumber + offset;
-      return Math.min(Math.max(1, newPageNumber), numPages);
-    });
+    setPageNumber(prevPageNumber => prevPageNumber + offset);
   };
 
-  const changeScale = (delta: number) => {
-    setScale(prevScale => {
-      const newScale = prevScale + delta;
-      return Math.min(Math.max(0.5, newScale), 2.0);
-    });
+  const prevPage = () => {
+    changePage(-1);
   };
 
-  if (!file) {
-    return (
-      <Card className="h-full flex items-center justify-center bg-reader-background">
-        <div className="text-center space-y-4">
-          <FileText className="h-16 w-16 mx-auto text-muted-foreground opacity-50" />
-          <div>
-            <h3 className="text-lg font-medium">No PDF loaded</h3>
-            <p className="text-sm text-muted-foreground">
-              Upload a PDF file to start reading
-            </p>
-          </div>
-        </div>
-      </Card>
-    );
-  }
+  const nextPage = () => {
+    changePage(1);
+  };
+
+  const zoomIn = () => {
+    setScale(prevScale => Math.min(prevScale + 0.1, 2.0));
+  };
+
+  const zoomOut = () => {
+    setScale(prevScale => Math.max(prevScale - 0.1, 0.5));
+  };
+
+  const rotate = () => {
+    setRotation(prevRotation => (prevRotation + 90) % 360);
+  };
 
   return (
-    <div className="h-full flex flex-col">
-      {/* PDF Controls */}
-      <div className="flex items-center justify-between p-4 border-b bg-card">
-        <div className="flex items-center gap-2">
-          <Badge variant="outline" className="text-xs">
-            Page {pageNumber} of {numPages}
-          </Badge>
-          <div className="flex gap-1">
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={() => changePage(-1)}
-              disabled={pageNumber <= 1}
-            >
-              Previous
+    <div className="h-full w-full flex flex-col items-center">
+      <div className="flex flex-col items-center flex-1 w-full">
+        <div className="flex items-center justify-between p-2 w-full max-w-4xl sticky top-0 bg-background z-10 border-b border-border">
+          <div className="flex items-center gap-2">
+            <Button onClick={prevPage} disabled={pageNumber <= 1} size="sm">
+              Prev
             </Button>
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={() => changePage(1)}
-              disabled={pageNumber >= numPages}
-            >
+            <Badge variant="secondary">
+              Page {pageNumber} of {numPages || '--'}
+            </Badge>
+            <Button onClick={nextPage} disabled={pageNumber >= numPages} size="sm">
               Next
             </Button>
           </div>
+          <div className="flex items-center gap-2">
+            <Button onClick={zoomOut} size="icon" variant="outline">
+              <ZoomOut className="h-4 w-4" />
+            </Button>
+            <Button onClick={zoomIn} size="icon" variant="outline">
+              <ZoomIn className="h-4 w-4" />
+            </Button>
+            <Button onClick={rotate} size="icon" variant="outline">
+              <RotateCw className="h-4 w-4" />
+            </Button>
+          </div>
         </div>
-        
-        <div className="flex items-center gap-1">
-          <Button
-            variant="outline"
-            size="icon"
-            onClick={() => changeScale(-0.1)}
-            disabled={scale <= 0.5}
-          >
-            <ZoomOut className="h-4 w-4" />
-          </Button>
-          <Badge variant="outline" className="text-xs min-w-12 justify-center">
-            {Math.round(scale * 100)}%
-          </Badge>
-          <Button
-            variant="outline"
-            size="icon"
-            onClick={() => changeScale(0.1)}
-            disabled={scale >= 2.0}
-          >
-            <ZoomIn className="h-4 w-4" />
-          </Button>
-          <Button
-            variant="outline"
-            size="icon"
-            onClick={() => setRotation(prev => (prev + 90) % 360)}
-          >
-            <RotateCw className="h-4 w-4" />
-          </Button>
-        </div>
-      </div>
 
-      {/* PDF Document */}
-      <div className="flex-1 bg-reader-background">
-        <ScrollArea className="h-full reading-scroll">
-          <div className="flex justify-center p-6">
+        <ScrollArea className="flex-1 w-full p-4">
+          <div className="flex justify-center items-start pt-4 pb-20">
             {loading && (
-              <div className="flex items-center justify-center py-12">
-                <Loader2 className="h-6 w-6 animate-spin mr-2" />
+              <div className="flex items-center justify-center space-x-2">
+                <Loader2 className="h-6 w-6 animate-spin" />
                 <span>Loading PDF...</span>
               </div>
             )}
-            
+
             {error && (
               <Card className="p-6 max-w-md">
                 <div className="text-center space-y-2">
@@ -176,7 +120,7 @@ export function PDFViewer({ file, onWordClick }: PDFViewerProps) {
                 </div>
               </Card>
             )}
-            
+
             {file && !error && (
               <div className="pdf-container">
                 <Document

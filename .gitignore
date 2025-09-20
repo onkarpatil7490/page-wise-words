@@ -6,8 +6,9 @@ yarn-debug.log*
 yarn-error.log*
 pnpm-debug.log*
 lerna-debug.log*
-
+book_reader
 node_modules
+page_wise_env
 dist
 dist-ssr
 *.local
@@ -22,3 +23,4 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+.env

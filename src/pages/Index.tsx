@@ -15,7 +15,8 @@ const Index = () => {
   const [showDefinition, setShowDefinition] = useState(false);
   const [showContext, setShowContext] = useState(false);
   const [contextWord, setContextWord] = useState("");
-  const [geminiApiKey, setGeminiApiKey] = useState("");
+  const [contextText, setContextText] = useState("");
+  const [surroundingText, setSurroundingText] = useState("");
 
   const { vocabularyWords, addWord, removeWord, exportToExcel } = useVocabulary();
 
@@ -27,8 +28,9 @@ const Index = () => {
     });
   };
 
-  const handleWordClick = (word: string, event: React.MouseEvent) => {
+  const handleWordClick = (word: string, fullText: string, event: React.MouseEvent) => {
     setSelectedWord(word);
+    setSurroundingText(fullText);
     setWordPosition({ x: event.clientX, y: event.clientY });
     setShowDefinition(true);
   };
@@ -50,8 +52,9 @@ const Index = () => {
     setShowDefinition(false);
   };
 
-  const handleShowContext = (word: string) => {
+  const handleShowContext = (word: string, context: string) => {
     setContextWord(word);
+    setContextText(context);
     setShowContext(true);
     setShowDefinition(false);
   };
@@ -81,9 +84,9 @@ const Index = () => {
           onRemoveWord={handleRemoveWord}
           onShowContext={handleShowContext}
         />
-        
+
         <main className="flex-1 flex flex-col">
-          <header className="border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 sticky top-0 z-40">
+          <header className="border-b bg-background/95 backdrop-blur sticky top-0 z-40">
             <div className="flex h-14 items-center px-4 gap-3">
               <SidebarTrigger />
               <div className="flex items-center gap-2">
@@ -93,7 +96,7 @@ const Index = () => {
               </div>
             </div>
           </header>
-          
+
           <div className="flex-1 p-4">
             {selectedFile ? (
               <PDFViewer file={selectedFile} onWordClick={handleWordClick} />
@@ -106,6 +109,7 @@ const Index = () => {
         {showDefinition && (
           <WordDefinition
             word={selectedWord}
+            fullText={surroundingText}
             position={wordPosition}
             onClose={() => setShowDefinition(false)}
             onAddToVocabulary={handleAddToVocabulary}
@@ -115,10 +119,9 @@ const Index = () => {
 
         <ContextDialog
           word={contextWord}
+          context={contextText}
           isOpen={showContext}
           onClose={() => setShowContext(false)}
-          apiKey={geminiApiKey}
-          onApiKeyChange={setGeminiApiKey}
         />
       </div>
     </SidebarProvider>

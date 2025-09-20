@@ -1,0 +1,31 @@
+Project: Personal Book Reader Web App 
+
+Requirements:
+
+1. PDF Support
+- User can select and open PDF files.
+- PDF should display scrollable pages like a book.
+
+2. Day/Night Mode
+- Toggle between light mode (day) and dark mode (night).
+
+3. Word Meaning & Context
+- Click a word → show meaning instantly.
+- “Show Context” button → displays the context in which the word is used in the sentence - an api call will be made for this to happen which will use llms
+- Use free dictionary sources (e.g., Free Dictionary API or local word list) - to get the meaning of the word instantaneously
+
+4. Word List / Vocabulary
+- Track all words user clicked and saw the meaning.
+- Store locally (JSON or browser storage).
+
+5. Export to Excel
+- Export word list with Word, Meaning, Date Added.
+- Do not include context in Excel.
+
+UI / UX
+- Clean, minimal web interface.
+- Main area shows PDF.
+- Sidebar/menu shows Word List, Export button, and Day/Night toggle.
+
+End Goal:
+A simple, free web app for reading PDFs, looking up word meanings, seeing context, tracking vocabulary, and exporting learned words to Excel.
