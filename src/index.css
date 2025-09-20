@@ -2,95 +2,130 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Definition of the design system. All colors, gradients, fonts, etc should be defined here. 
-All colors MUST be HSL.
-*/
+/* Book Reader Design System - Warm, reading-focused color palette */
 
 @layer base {
   :root {
-    --background: 0 0% 100%;
-    --foreground: 222.2 84% 4.9%;
+    /* Reading Experience - Warm paper tones */
+    --background: 35 20% 97%;
+    --foreground: 25 20% 15%;
 
-    --card: 0 0% 100%;
-    --card-foreground: 222.2 84% 4.9%;
+    /* Reading Surface */
+    --card: 35 25% 98%;
+    --card-foreground: 25 20% 15%;
 
-    --popover: 0 0% 100%;
-    --popover-foreground: 222.2 84% 4.9%;
+    /* Interactive Elements */
+    --popover: 35 25% 98%;
+    --popover-foreground: 25 20% 15%;
 
-    --primary: 222.2 47.4% 11.2%;
-    --primary-foreground: 210 40% 98%;
+    /* Primary - Warm Brown Academic */
+    --primary: 25 30% 25%;
+    --primary-foreground: 35 25% 98%;
 
-    --secondary: 210 40% 96.1%;
-    --secondary-foreground: 222.2 47.4% 11.2%;
+    /* Secondary - Soft Cream */
+    --secondary: 35 30% 92%;
+    --secondary-foreground: 25 30% 25%;
 
-    --muted: 210 40% 96.1%;
-    --muted-foreground: 215.4 16.3% 46.9%;
+    /* Muted Reading Elements */
+    --muted: 35 25% 90%;
+    --muted-foreground: 25 15% 50%;
 
-    --accent: 210 40% 96.1%;
-    --accent-foreground: 222.2 47.4% 11.2%;
+    /* Accent - Gentle Blue for Definitions */
+    --accent: 210 50% 85%;
+    --accent-foreground: 210 60% 25%;
 
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 210 40% 98%;
+    /* Semantic Colors */
+    --destructive: 0 70% 55%;
+    --destructive-foreground: 0 0% 98%;
 
-    --border: 214.3 31.8% 91.4%;
-    --input: 214.3 31.8% 91.4%;
-    --ring: 222.2 84% 4.9%;
+    /* Borders and Inputs */
+    --border: 35 20% 88%;
+    --input: 35 20% 88%;
+    --ring: 25 30% 25%;
 
-    --radius: 0.5rem;
+    --radius: 0.75rem;
 
-    --sidebar-background: 0 0% 98%;
+    /* Reading App Specific Design Tokens */
+    --reader-background: 35 25% 96%;
+    --reader-shadow: 25 20% 15% / 0.1;
+    --definition-background: 35 30% 99%;
+    --vocabulary-highlight: 210 60% 92%;
+    
+    /* Sidebar for Book Reader */
+    --sidebar-background: 35 20% 94%;
+    --sidebar-foreground: 25 20% 20%;
+    --sidebar-primary: 25 30% 25%;
+    --sidebar-primary-foreground: 35 25% 98%;
+    --sidebar-accent: 35 25% 88%;
+    --sidebar-accent-foreground: 25 30% 25%;
+    --sidebar-border: 35 15% 85%;
+    --sidebar-ring: 25 30% 25%;
 
-    --sidebar-foreground: 240 5.3% 26.1%;
-
-    --sidebar-primary: 240 5.9% 10%;
-
-    --sidebar-primary-foreground: 0 0% 98%;
-
-    --sidebar-accent: 240 4.8% 95.9%;
-
-    --sidebar-accent-foreground: 240 5.9% 10%;
-
-    --sidebar-border: 220 13% 91%;
-
-    --sidebar-ring: 217.2 91.2% 59.8%;
+    /* Gradients for Enhanced Reading Experience */
+    --gradient-reading: linear-gradient(135deg, hsl(var(--reader-background)), hsl(35 30% 98%));
+    --gradient-definition: linear-gradient(135deg, hsl(var(--definition-background)), hsl(210 60% 98%));
+    
+    /* Transitions for Smooth Mode Switching */
+    --transition-theme: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    --transition-smooth: all 0.2s ease-out;
   }
 
   .dark {
-    --background: 222.2 84% 4.9%;
-    --foreground: 210 40% 98%;
+    /* Night Reading Mode - Rich, comfortable dark tones */
+    --background: 220 15% 8%;
+    --foreground: 35 15% 88%;
 
-    --card: 222.2 84% 4.9%;
-    --card-foreground: 210 40% 98%;
+    /* Dark Reading Surface */
+    --card: 220 15% 10%;
+    --card-foreground: 35 15% 88%;
 
-    --popover: 222.2 84% 4.9%;
-    --popover-foreground: 210 40% 98%;
+    /* Dark Interactive Elements */
+    --popover: 220 15% 12%;
+    --popover-foreground: 35 15% 88%;
 
-    --primary: 210 40% 98%;
-    --primary-foreground: 222.2 47.4% 11.2%;
+    /* Primary - Warm Gold for Dark Mode */
+    --primary: 45 40% 70%;
+    --primary-foreground: 220 15% 8%;
 
-    --secondary: 217.2 32.6% 17.5%;
-    --secondary-foreground: 210 40% 98%;
+    /* Secondary - Dark Warm Gray */
+    --secondary: 220 10% 18%;
+    --secondary-foreground: 35 15% 88%;
 
-    --muted: 217.2 32.6% 17.5%;
-    --muted-foreground: 215 20.2% 65.1%;
+    /* Dark Muted Elements */
+    --muted: 220 10% 15%;
+    --muted-foreground: 35 10% 65%;
 
-    --accent: 217.2 32.6% 17.5%;
-    --accent-foreground: 210 40% 98%;
+    /* Accent - Soft Blue for Dark Definitions */
+    --accent: 210 50% 35%;
+    --accent-foreground: 210 10% 90%;
 
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 210 40% 98%;
+    /* Dark Semantic Colors */
+    --destructive: 0 65% 50%;
+    --destructive-foreground: 0 0% 98%;
 
-    --border: 217.2 32.6% 17.5%;
-    --input: 217.2 32.6% 17.5%;
-    --ring: 212.7 26.8% 83.9%;
-    --sidebar-background: 240 5.9% 10%;
-    --sidebar-foreground: 240 4.8% 95.9%;
-    --sidebar-primary: 224.3 76.3% 48%;
-    --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 240 3.7% 15.9%;
-    --sidebar-accent-foreground: 240 4.8% 95.9%;
-    --sidebar-border: 240 3.7% 15.9%;
-    --sidebar-ring: 217.2 91.2% 59.8%;
+    /* Dark Borders and Inputs */
+    --border: 220 10% 20%;
+    --input: 220 10% 20%;
+    --ring: 45 40% 70%;
+    /* Dark Mode Reading Tokens */
+    --reader-background: 220 15% 12%;
+    --reader-shadow: 0 0% 0% / 0.3;
+    --definition-background: 220 15% 15%;
+    --vocabulary-highlight: 210 50% 25%;
+
+    /* Dark Sidebar */
+    --sidebar-background: 220 15% 6%;
+    --sidebar-foreground: 35 15% 85%;
+    --sidebar-primary: 45 40% 70%;
+    --sidebar-primary-foreground: 220 15% 8%;
+    --sidebar-accent: 220 10% 18%;
+    --sidebar-accent-foreground: 35 15% 85%;
+    --sidebar-border: 220 10% 20%;
+    --sidebar-ring: 45 40% 70%;
+
+    /* Dark Gradients */
+    --gradient-reading: linear-gradient(135deg, hsl(var(--reader-background)), hsl(220 15% 15%));
+    --gradient-definition: linear-gradient(135deg, hsl(var(--definition-background)), hsl(210 50% 20%));
   }
 }
 
@@ -100,6 +135,37 @@ All colors MUST be HSL.
   }
 
   body {
-    @apply bg-background text-foreground;
+    @apply bg-background text-foreground transition-colors duration-300;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  }
+
+  /* Reading-focused typography */
+  .reading-text {
+    font-family: 'Georgia', 'Times New Roman', serif;
+    line-height: 1.7;
+    letter-spacing: 0.01em;
+  }
+
+  /* Smooth word selection for definitions */
+  .selectable-text {
+    cursor: text;
+    user-select: text;
+  }
+
+  .selectable-text .word:hover {
+    @apply bg-vocabulary-highlight rounded-sm transition-colors duration-150;
+  }
+
+  /* Custom scrollbar for reading area */
+  .reading-scroll::-webkit-scrollbar {
+    width: 8px;
+  }
+
+  .reading-scroll::-webkit-scrollbar-track {
+    @apply bg-muted rounded-lg;
+  }
+
+  .reading-scroll::-webkit-scrollbar-thumb {
+    @apply bg-muted-foreground/30 rounded-lg hover:bg-muted-foreground/50;
   }
 }

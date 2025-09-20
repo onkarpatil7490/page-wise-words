@@ -57,6 +57,25 @@ export default {
           border: "hsl(var(--sidebar-border))",
           ring: "hsl(var(--sidebar-ring))",
         },
+        // Reading App Specific Colors
+        reader: {
+          background: "hsl(var(--reader-background))",
+          shadow: "hsl(var(--reader-shadow))",
+        },
+        definition: {
+          background: "hsl(var(--definition-background))",
+        },
+        vocabulary: {
+          highlight: "hsl(var(--vocabulary-highlight))",
+        },
+      },
+      backgroundImage: {
+        'gradient-reading': 'var(--gradient-reading)',
+        'gradient-definition': 'var(--gradient-definition)',
+      },
+      transitionProperty: {
+        'theme': 'var(--transition-theme)',
+        'smooth': 'var(--transition-smooth)',
       },
       borderRadius: {
         lg: "var(--radius)",

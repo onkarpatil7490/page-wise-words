@@ -1,73 +1,76 @@
-# Welcome to your Lovable project
+# Personal Book Reader Web App
 
-## Project info
+A beautiful, minimalist PDF reader with vocabulary learning features. Perfect for language learners and avid readers who want to expand their vocabulary while reading.
 
-**URL**: https://lovable.dev/projects/10681075-f156-4dfa-893e-0825b0aa0109
+## Features
 
-## How can I edit this code?
+### 📖 PDF Reading
+- Upload and view PDF files with a clean, distraction-free interface
+- Zoom, rotate, and navigate pages easily
+- Responsive design that works on desktop and mobile
 
-There are several ways of editing your application.
+### 🌙 Day/Night Mode
+- Toggle between comfortable light and dark reading modes
+- Warm, paper-like colors optimized for long reading sessions
+- Smooth theme transitions
 
-**Use Lovable**
+### 📚 Vocabulary Learning
+- **Click any word** to see instant definitions from a free dictionary API
+- **AI-powered context analysis** using Gemini API (requires your own API key)
+- **Smart vocabulary tracking** - automatically saves words you look up
+- **Export to Excel** - download your vocabulary list for further study
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/10681075-f156-4dfa-893e-0825b0aa0109) and start prompting.
+### 🎯 Smart Features
+- **Local storage** - your vocabulary is saved in your browser
+- **Pronunciation** - hear how words are pronounced
+- **Word deduplication** - won't add the same word twice
+- **Clean, academic design** - focused on reading without distractions
 
-Changes made via Lovable will be committed automatically to this repo.
+## How to Use
 
-**Use your preferred IDE**
+1. **Upload a PDF**: Drag and drop or click to select a PDF file
+2. **Start reading**: Navigate through pages using the controls
+3. **Learn new words**: Click on any word to see its definition
+4. **Get context**: Use the "Context" button for AI-powered explanations (requires Gemini API key)
+5. **Track progress**: Your vocabulary list grows automatically in the sidebar
+6. **Export**: Download your vocabulary as an Excel file anytime
 
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
+## API Setup
 
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
+### For Context Analysis (Optional)
+To use AI-powered context analysis, you'll need a free Gemini API key:
 
-Follow these steps:
+1. Visit [Google AI Studio](https://makersuite.google.com/app/apikey)
+2. Create a free account and generate an API key
+3. Enter your API key when prompted in the app
 
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
+The basic dictionary features work without any API key!
 
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
+## Technology Stack
 
-# Step 3: Install the necessary dependencies.
-npm i
+- **React 18** with TypeScript
+- **Tailwind CSS** for styling with custom design system
+- **react-pdf** for PDF rendering
+- **Radix UI** components for accessibility
+- **Local storage** for vocabulary persistence
+- **XLSX** for Excel export functionality
 
-# Step 4: Start the development server with auto-reloading and an instant preview.
+## Development
+
+This project is built with Vite and can be run locally:
+
+```bash
+npm install
 npm run dev
 ```
 
-**Edit a file directly in GitHub**
+## Privacy
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+- All vocabulary data is stored locally in your browser
+- PDF files are processed entirely on your device
+- Only context analysis requires internet connection (when using Gemini API)
+- No data is sent to external servers except for dictionary lookups and optional AI context
 
-**Use GitHub Codespaces**
+---
 
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
-
-## What technologies are used for this project?
-
-This project is built with:
-
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
-
-## How can I deploy this project?
-
-Simply open [Lovable](https://lovable.dev/projects/10681075-f156-4dfa-893e-0825b0aa0109) and click on Share -> Publish.
-
-## Can I connect a custom domain to my Lovable project?
-
-Yes, you can!
-
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
-
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/features/custom-domain#custom-domain)
+Happy reading and learning! 📚✨
