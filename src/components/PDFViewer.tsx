@@ -6,6 +6,10 @@ import { Badge } from "@/components/ui/badge";
 import { Loader2, FileText, ZoomIn, ZoomOut, RotateCw } from "lucide-react";
 import { ScrollArea } from "@/components/ui/scroll-area";
 
+// Import CSS for react-pdf
+import 'react-pdf/dist/Page/AnnotationLayer.css';
+import 'react-pdf/dist/Page/TextLayer.css';
+
 // Set up PDF.js worker - serve from local public directory
 pdfjs.GlobalWorkerOptions.workerSrc = '/pdf.worker.min.mjs';
 
@@ -35,18 +39,30 @@ export function PDFViewer({ file, onWordClick }: PDFViewerProps) {
     console.error("PDF load error:", error);
   }
 
-  const handleTextSelection = (event: React.MouseEvent) => {
+  const handleTextClick = (event: React.MouseEvent) => {
     const target = event.target as HTMLElement;
-    const selection = window.getSelection();
     
-    if (selection && selection.toString().trim()) {
-      const selectedText = selection.toString().trim();
-      const words = selectedText.split(/\s+/);
+    // Check if clicked element is part of text layer
+    if (target.classList.contains('textLayer') || target.closest('.textLayer')) {
+      const selection = window.getSelection();
+      let wordToDefine = '';
       
-      // If single word selected, show definition
-      if (words.length === 1 && words[0].length > 1) {
-        const cleanWord = words[0].replace(/[^\w]/g, '');
-        if (cleanWord) {
+      // Try to get selected text first
+      if (selection && selection.toString().trim()) {
+        const selectedText = selection.toString().trim();
+        const words = selectedText.split(/\s+/);
+        
+        if (words.length === 1 && words[0].length > 1) {
+          wordToDefine = words[0];
+        }
+      } else if (target.textContent) {
+        // If no selection, try to get word from clicked element
+        wordToDefine = target.textContent.trim();
+      }
+      
+      if (wordToDefine) {
+        const cleanWord = wordToDefine.replace(/[^\w]/g, '');
+        if (cleanWord && cleanWord.length > 1) {
           onWordClick(cleanWord, event);
         }
       }
@@ -162,28 +178,31 @@ export function PDFViewer({ file, onWordClick }: PDFViewerProps) {
             )}
             
             {file && !error && (
-              <Document
-                file={file}
-                onLoadSuccess={onDocumentLoadSuccess}
-                onLoadError={onDocumentLoadError}
-                loading={null}
-                className="shadow-lg"
-              >
-                <div
-                  className="selectable-text"
-                  onMouseUp={handleTextSelection}
-                  ref={textLayerRef}
+              <div className="pdf-container">
+                <Document
+                  file={file}
+                  onLoadSuccess={onDocumentLoadSuccess}
+                  onLoadError={onDocumentLoadError}
+                  loading={null}
+                  className="shadow-lg"
                 >
-                  <Page
-                    pageNumber={pageNumber}
-                    scale={scale}
-                    rotate={rotation}
-                    className="border border-border rounded-lg bg-white"
-                    renderTextLayer={true}
-                    renderAnnotationLayer={false}
-                  />
-                </div>
-              </Document>
+                  <div
+                    className="pdf-page-container"
+                    onClick={handleTextClick}
+                    onMouseUp={handleTextClick}
+                    ref={textLayerRef}
+                  >
+                    <Page
+                      pageNumber={pageNumber}
+                      scale={scale}
+                      rotate={rotation}
+                      className="border border-border rounded-lg bg-white"
+                      renderTextLayer={true}
+                      renderAnnotationLayer={false}
+                    />
+                  </div>
+                </Document>
+              </div>
             )}
           </div>
         </ScrollArea>
