@@ -6,8 +6,8 @@ import { Badge } from "@/components/ui/badge";
 import { Loader2, FileText, ZoomIn, ZoomOut, RotateCw } from "lucide-react";
 import { ScrollArea } from "@/components/ui/scroll-area";
 
-// Set up PDF.js worker
-pdfjs.GlobalWorkerOptions.workerSrc = `//unpkg.com/pdfjs-dist@${pdfjs.version}/build/pdf.worker.min.js`;
+// Set up PDF.js worker - serve from local public directory
+pdfjs.GlobalWorkerOptions.workerSrc = '/pdf.worker.min.mjs';
 
 interface PDFViewerProps {
   file: File | null;
