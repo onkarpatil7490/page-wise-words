@@ -17,7 +17,11 @@ REM Activate Python virtual environment
 call page_wise_env\Scripts\activate.bat
 
 REM Run FastAPI server in a new terminal window
-start "" cmd /k "uvicorn main:app --reload"
+start "" cmd /k "uvicorn main:app --reload --port 9000"
+
+REM Wait a few seconds then open the browser
+timeout /t 5 /nobreak >nul
+start "" http://127.0.0.1:9000/
 
 REM Give server a few seconds to start
 timeout /t 5 /nobreak >nul
