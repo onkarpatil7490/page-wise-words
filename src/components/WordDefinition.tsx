@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Loader2, BookOpen } from "lucide-react";
+import { Loader2 } from "lucide-react";
 
 export interface AnalysisResult {
   meaning: string;
@@ -15,7 +15,6 @@ interface WordDefinitionProps {
   position: { x: number; y: number };
   onClose: () => void;
   onAddToVocabulary: (word: string, definition: string) => void;
-  onShowContext: (word: string, context: string) => void;
 }
 
 export function WordDefinition({
@@ -23,8 +22,7 @@ export function WordDefinition({
   fullText,
   position,
   onClose,
-  onAddToVocabulary,
-  onShowContext
+  onAddToVocabulary
 }: WordDefinitionProps) {
   const [result, setResult] = useState<AnalysisResult | null>(null);
   const [loading, setLoading] = useState(true);
@@ -42,13 +40,10 @@ export function WordDefinition({
       setError(null);
 
       const payload = { word, text: fullText };
-      console.log('Sending payload to API:', payload);
 
       const response = await fetch("http://127.0.0.1:8000/api/analyze-word", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload),
       });
 
@@ -73,55 +68,67 @@ export function WordDefinition({
     }
   };
 
+  const cardWidth = 520; // wider for better visibility
+  const cardMaxHeight = 380; // max height, scroll if needed
+  const left = Math.min(position.x, window.innerWidth - cardWidth - 20);
+  const top = Math.min(position.y, window.innerHeight - cardMaxHeight - 20);
+
   return (
     <div
-      className="fixed z-50 w-80 max-h-96"
-      style={{
-        left: Math.min(position.x, window.innerWidth - 320),
-        top: Math.min(position.y, window.innerHeight - 400),
-      }}
+      className="fixed z-50"
+      style={{ left, top, width: cardWidth, maxHeight: cardMaxHeight, overflowY: "auto" }}
     >
-      <Card className="bg-definition-background border-border shadow-lg backdrop-blur-sm">
-        <CardHeader className="pb-3">
+      <Card className="bg-background border border-border rounded-xl text-sm">
+        <CardHeader className="pb-3 border-b border-border">
           <div className="flex items-center justify-between">
-            <CardTitle className="text-lg font-semibold capitalize">{word}</CardTitle>
-            <Button variant="ghost" size="sm" onClick={onClose} className="h-6 w-6 p-0 hover:bg-muted">×</Button>
+            <CardTitle className="text-lg font-semibold capitalize text-foreground">
+              {word}
+            </CardTitle>
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={onClose}
+              className="h-6 w-6 p-0 hover:bg-muted rounded"
+            >
+              ×
+            </Button>
           </div>
         </CardHeader>
 
-        <CardContent>
+        <CardContent className="space-y-3 p-4">
           {loading && (
             <div className="flex items-center justify-center py-4">
               <Loader2 className="h-4 w-4 animate-spin" />
-              <span className="ml-2 text-sm">Loading analysis...</span>
+              <span className="ml-2 text-sm text-foreground">Loading analysis...</span>
             </div>
           )}
 
-          {error && <div className="text-sm text-destructive py-4">{error}</div>}
+          {error && (
+            <div className="text-sm text-destructive py-2">{error}</div>
+          )}
 
           {result && (
-            <div className="space-y-3">
+            <>
               <div className="space-y-1">
-                <Badge variant="secondary" className="text-xs">Word</Badge>
-                <p>{word}</p>
-
-                <Badge variant="secondary" className="text-xs">Sent Text</Badge>
-                <p>{fullText}</p>
-
                 <Badge variant="secondary" className="text-xs">Meaning</Badge>
-                <p>{result.meaning}</p>
-
-                <Badge variant="secondary" className="text-xs">Context</Badge>
-                <p>{result.context}</p>
+                <p className="text-sm leading-relaxed text-foreground">{result.meaning}</p>
               </div>
 
-              <div className="flex gap-2 pt-2">
-                <Button size="sm" onClick={handleAddToVocabulary} className="flex-1">Add to Vocabulary</Button>
-                <Button size="sm" variant="outline" onClick={() => onShowContext(word, result.context)} className="flex items-center gap-1">
-                  <BookOpen className="h-3 w-3" /> Context
+              <div className="space-y-1">
+                <Badge variant="secondary" className="text-xs">Context</Badge>
+                <p className="text-sm leading-relaxed text-foreground">{result.context}</p>
+              </div>
+
+              <div className="pt-2">
+                <Button
+                  size="sm"
+                  onClick={handleAddToVocabulary}
+                  className="w-full"
+                >
+                  Add to Vocabulary
                 </Button>
               </div>
-            </div>
+            </>
           )}
         </CardContent>
       </Card>

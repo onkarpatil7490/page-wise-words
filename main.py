@@ -44,10 +44,10 @@ def get_result(word: str, text: str):
     You are an expert dictionary and context analyzer.
     Word: {word}
     Text: {text}
-
+    
     Return strictly in following format:
     meaning: meaning of the word
-    context: how the word is used (keep it short, one liner)
+    context: meaning of the input Word considering the input Text (keep it short, one liner)
     """
     result = llm.invoke(prompt)
     return extract_meaning_context(result.content)

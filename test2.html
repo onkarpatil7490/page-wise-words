@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Number Highlighter</title>
+    <style>
+        /* Dark mode background */
+        body {
+            background-color: #1e1e2f;
+            color: #ffffff;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        h1 {
+            margin-bottom: 20px;
+            font-weight: 400;
+            color: #cdd6f4;
+        }
+
+        .numbers {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .number-box {
+            width: 80px;
+            height: 80px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 12px;
+            background-color: #2a2a3a;
+            font-size: 28px;
+            font-weight: bold;
+            transition: background-color 0.3s, color 0.3s;
+            cursor: default;
+            user-select: none;
+        }
+
+        button {
+            padding: 12px 24px;
+            font-size: 16px;
+            font-weight: bold;
+            color: #fff;
+            background-color: #4f46e5;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        button:hover {
+            background-color: #6366f1;
+        }
+    </style>
+</head>
+
+<body>
+
+    <h1>Number Highlighter</h1>
+
+    <div class="numbers">
+        <div class="number-box">12</div>
+        <div class="number-box">7</div>
+        <div class="number-box">8</div>
+        <div class="number-box">15</div>
+    </div>
+
+    <button onclick="highlightNumbers()">Highlight Even/Odd</button>
+
+    <script>
+        function highlightNumbers() {
+            const boxes = document.querySelectorAll('.number-box');
+            boxes.forEach(box => {
+                const value = parseInt(box.textContent);
+                if (value % 2 === 0) {
+                    box.style.backgroundColor = '#ff4d4d'; // red for even
+                    box.style.color = '#fff';
+                } else {
+                    box.style.backgroundColor = '#22c55e'; // green for odd
+                    box.style.color = '#fff';
+                }
+            });
+        }
+    </script>
+
+</body>
+
+</html>
