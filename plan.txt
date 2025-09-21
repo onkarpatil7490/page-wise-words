@@ -1,0 +1,8 @@
+tap anywhere the card should disappear
+preloaded book
+translucent card
+night vision
+hand arrow on pdf
+next button at the end too
+page insert and drag button
+prompy, context fine tunning
